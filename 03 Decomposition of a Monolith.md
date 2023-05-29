@@ -6,8 +6,8 @@ In the world of software design and architecture, decomposition plays a pivotal 
 
 - [Service Types and Decomposition](#Service-Types-and-Decomposition)
 - [Domain-Based Microservices](#Domain-Based-Microservices)
-- [Business Process-Based Microservices](#Business-Process-Based-Microservices)
-- [Atomic Transaction-Based Microservices](#Atomic-Transaction-Based-Microservices)
+- [Business Process-Based Microservices](#business-process-based)
+- [Atomic Transaction-Based Microservices](#atomic-transaction-based)
 - [Functional Use Patterns](#Functional-Use-Patterns)
 
 ## Service Types and Decomposition
