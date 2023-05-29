@@ -49,7 +49,7 @@ graph LR
 
 This process is a simplified representation of domain-driven design and forms the basis for domain-based microservices. Among all patterns, this is the one you'll most frequently employ.
 
-### Business Process-Based Microservices <a name="business-process-based"></a>
+### Business Process-Based Microservices <div id="business-process-based"></div>
 
 In complex scenarios where decompositions do not fit into a single domain, business process-based microservices come into play. These services offer a structured approach to your microservices architecture, resolving the issue of having to duplicate code logic across different components, especially when spanning multiple domains. Following the "Don't Repeat Yourself" (DRY)<sup>[1](#footnote-dry)</sup> principle and to simplify your architecture, you can use business process domains as a higher level of service within your architecture.
 
@@ -170,7 +170,7 @@ The Sidecar pattern is another pivotal strategy used to enforce the separation o
   }
   ```
 
-  In the example, `OrderProcessService` uses `IInventoryService` and `IPaymentService` to process an order. If other services need to process an order, instead of repeating this logic, they can simply use `OrderProcessService.ProcessOrder()`, thus adhering to the DRY principle. [↩](#Business-Process-Based-Microservices-)
+  In the example, `OrderProcessService` uses `IInventoryService` and `IPaymentService` to process an order. If other services need to process an order, instead of repeating this logic, they can simply use `OrderProcessService.ProcessOrder()`, thus adhering to the DRY principle. [↩](#business-process-based) <a id="business-process-based">↩</a>)
   
 </details>
 
