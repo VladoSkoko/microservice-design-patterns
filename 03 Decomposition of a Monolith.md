@@ -9,8 +9,6 @@ In the world of software design and architecture, decomposition plays a pivotal 
 - [Business Process-Based Microservices](#Business-Process-Based-Microservices)
 - [Atomic Transaction-Based Microservices](#Atomic-Transaction-Based-Microservices)
 - [Functional Use Patterns](#Functional-Use-Patterns)
-- [Strangler Pattern](#Strangler-Pattern)
-- [Sidecar Pattern](#Sidecar-Pattern)
 
 ## Service Types and Decomposition
 
@@ -79,7 +77,7 @@ graph LR
 
 It's recommended to encapsulate business process code into its own module for ease of access and modification when business process changes occur. In the design strategy for business process services, the focus is on defining processes, identifying involved data domains, defining APIs for the business processes, and implementing the service while wiring it using client code to interact with data domains over REST. This modular approach to each process will simplify iteration when process changes are necessary.
 
-## Atomic Transaction-Based Microservices
+## Atomic Transaction-Based Microservices <a name="atomic-transaction-based"></a>
 
 In a microservices architecture, there may be instances where true atomic transactions are necessary because eventual consistency isn't sufficient. These unique use cases call for the construction of special logic and systems.
 
@@ -101,31 +99,37 @@ Finally, implement the service as normal, but give more weight to fast failure e
 
 Avoid atomic transaction-based microservices if possible, as they can create complexities in distributed systems. They can limit effective database distribution and lead to network congestion. It's usually better to persuade stakeholders to accept eventual consistency or simulated rollbacks. However, each of these also has its own set of challenges, and all options should be thoroughly considered before committing to a single path.
 
+Here is a diagram that summarizes the steps involved in designing atomic transaction-based microservices based on the process outlined above:
+
+```mermaid
+graph TB
+    A[Ensure need for Atomic Transaction] --> B[Underlying data domains share a database]
+    B --> C[Merge into single shared database if needed]
+    C --> D[Define clear transaction rules including rollback conditions]
+    D --> E[Implement the service, consider fast failure]
+    E --> F[Proceed with normal operations]
+    A --> G[Explore alternatives if Atomic Transactions aren't necessary]
+```
+
+1. **Ensure need for Atomic Transaction**: Assess the requirement for atomic transactions. If not required, explore alternatives (Node G).
+2. **Underlying data domains share a database**: Ensure that the data domains involved in the transaction share a common database.
+3. **Merge into single shared database if needed**: If the data domains don't share a database, merge them into a single shared database. 
+4. **Define clear transaction rules including rollback conditions**: Lay out clear rules for the transaction, including conditions for rollback.
+5. **Implement the service, consider fast failure**: Implement the service as you would normally, but emphasize fast failure before initiating a transaction to save time and avoid potential bottlenecks.
+6. **Proceed with normal operations**: Continue with the usual operations, with the implemented service in place.
+7. **Explore alternatives if Atomic Transactions aren't necessary**: If atomic transactions aren't necessary, look for alternative approaches instead of proceeding with the atomic service design.
 
 ## Functional Use Patterns
 
 Besides service decomposition, it is crucial to understand functional use patterns that are often used to facilitate the migration from a monolithic system into a microservices architecture. We will delve into two commonly used patterns, the Strangler pattern and the Sidecar pattern.
 
-## Strangler Pattern
+**Strangler Pattern**
 
 The Strangler pattern is perhaps the most frequently discussed strategy in the context of transitioning from a monolithic system to a microservices architecture. This is because in most scenarios, the goal is not to create new systems but to break down existing monolithic systems.
 
-```mermaid
-graph TD
-    A[Monolithic System] -->|Strangler Pattern| B[Microservices Architecture]
-```
-
-## Sidecar Pattern
+**Sidecar Pattern**
 
 The Sidecar pattern is another pivotal strategy used to enforce the separation of concerns across the system. This pattern offloads operational security functions to separate components, which are then deployed alongside the main service component, thus avoiding the cluttering of our codebase with these functional needs.
-
-```mermaid
-graph LR
-    A[Main Service Component] --> B[Operational Security Function]
-    B --> C[Deployed Sidecar]
-```
-
-Now that we have a broad overview, it's time to delve into domain-based services.
 
 ---
 ## Footnotes
@@ -183,7 +187,7 @@ Now that we have a broad overview, it's time to delve into domain-based services
 
 4. **Durability**: Durability means that once a transaction has been committed, it will remain committed even in the case of a system failure. This is usually achieved by storing the transaction into a transaction log or a similar method.
 
-ACID properties are critical in many database contexts, especially in scenarios where consistency and reliability of data are paramount. However, maintaining ACID properties can come at the cost of performance and scalability in distributed systems. [↩](#business-process-based)
+ACID properties are critical in many database contexts, especially in scenarios where consistency and reliability of data are paramount. However, maintaining ACID properties can come at the cost of performance and scalability in distributed systems. [↩](#atomic-transaction-based)
   
 </details>
 
