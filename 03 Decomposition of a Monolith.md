@@ -170,7 +170,7 @@ The Sidecar pattern is another pivotal strategy used to enforce the separation o
   }
   ```
 
-  In the example, `OrderProcessService` uses `IInventoryService` and `IPaymentService` to process an order. If other services need to process an order, instead of repeating this logic, they can simply use `OrderProcessService.ProcessOrder()`, thus adhering to the DRY principle. [↩](#business-process-based)
+  In the example, `OrderProcessService` uses `IInventoryService` and `IPaymentService` to process an order. If other services need to process an order, instead of repeating this logic, they can simply use `OrderProcessService.ProcessOrder()`, thus adhering to the DRY principle. [↩](#Business-Process-Based-Microservices-)
   
 </details>
 
