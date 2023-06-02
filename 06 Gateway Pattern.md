@@ -5,6 +5,7 @@ In Microservice architecture, one key concept that ensures effective integration
 ## Table of Contents
 
 - [Understanding the Gateway Pattern](#understanding-the-gateway-pattern)
+- [Problems Leading to the Creation of Gateway Pattern](#problems-leading-to-the-creation-of-gateway-pattern)
 - [Defining a Contract in Gateway Pattern](#defining-a-contract-in-gateway-pattern)
 - [Mutating and Limiting Calls](#mutating-and-limiting-calls)
 - [Security and Authorization](#security-and-authorization)
@@ -25,6 +26,20 @@ graph LR
 ```
 
 Despite its numerous benefits, it's crucial to remember that the Gateway can become a single point of failure for a system. It should, therefore, be designed to scale and respond well under high demand.
+
+## Problems Leading to the Creation of Gateway Pattern
+
+Several challenges in system design necessitated the creation of the Gateway pattern. Some of these are:
+
+- **Decoupling**: Without a gateway, clients need to have knowledge about each individual service and their locations, leading to a tightly coupled system. The Gateway pattern provides a layer of abstraction, allowing services to change without impacting clients.
+
+- **Security and Authorization**: Managing security and authorization can be cumbersome when handled separately for each service. With the Gateway pattern, these concerns are centralized, simplifying management and ensuring consistent policy enforcement.
+
+- **Rate limiting and throttling**: Without a gateway, it would be difficult to control the number of requests each client can make, possibly leading to service overloads. The Gateway pattern can efficiently manage these concerns.
+
+- **Protocol Translation**: Microservices in a system can communicate using various protocols. The gateway can provide a single point of protocol translation, making it easier for clients.
+
+These challenges, among others, led to the development of the Gateway pattern, aiming to simplify the interaction between clients and services in a microservices architecture.
 
 ##  Defining a Contract in Gateway Pattern
 
