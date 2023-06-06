@@ -28,42 +28,86 @@ metrics.Measure.Counter.Increment(counterOptions);
 ```
 
 ## Creating Effective Dashboards <a name="creating-effective-dashboards"></a>
-Dashboards are powerful tools, especially for on-call activity. It's advisable to build high-level dashboards that your on-call engineer can use to detect potential issues before they escalate. However, these dashboards should not be too cluttered, maintaining a clear picture of the overall system health.
+
+Dashboards are powerful tools, particularly for on-call activities. They provide a clear, visual representation of a system's state, helping to highlight potential issues before they escalate into significant problems. These high-level dashboards should maintain an overall view of system health without becoming too cluttered with information.
+
+Imagine we are monitoring an e-commerce application composed of various services such as `User Management`, `Inventory Management`, `Order Management`, `Payment Gateway`, and `Shipping Service`.
+
+For this e-commerce application, a useful high-level dashboard might include key metrics from each service, like:
+
+- **User Management Service:** Active user count, login rate, error rate.
+- **Inventory Management Service:** Available inventory count, inventory update frequency, error rate.
+- **Order Management Service:** Order creation rate, pending orders count, error rate.
+- **Payment Gateway Service:** Payment transaction rate, successful payments, failed payments.
+- **Shipping Service:** Shipment creation rate, on-transit shipments, error rate.
+
+These key metrics provide a quick overview of the system's health and can alert on-call engineers to potential issues.
+
+The microservice architecture and the flow of metrics can be visualized as in the following diagram:
 
 ```mermaid
 graph TB
-  ServiceA[Service A]
-  ServiceB[Service B]
-  ServiceC[Service C]
-  ServiceD[Service D]
-  ServiceE[Service E]
-  Aggregator[Metrics Aggregator]
+  UserManagement[User Management]
+  InventoryManagement[Inventory Management]
+  OrderManagement[Order Management]
+  PaymentGateway[Payment Gateway]
+  ShippingService[Shipping Service]
+  MetricsAggregator[Metrics Aggregator]
 
-  ServiceA -->|Metrics| Aggregator
-  ServiceB -->|Metrics| Aggregator
-  ServiceC -->|Metrics| Aggregator
-  ServiceD -->|Metrics| Aggregator
-  ServiceE -->|Metrics| Aggregator
+  UserManagement -->|Metrics| MetricsAggregator
+  InventoryManagement -->|Metrics| MetricsAggregator
+  OrderManagement -->|Metrics| MetricsAggregator
+  PaymentGateway -->|Metrics| MetricsAggregator
+  ShippingService -->|Metrics| MetricsAggregator
 ```
 
-## Adding Depth to Dashboards <a name="adding-depth-to-dashboards"></a>
-In addition to high-level dashboards, it is useful to have detailed dashboards for each service. When a problem is suspected, these dashboards can provide more in-depth insight into the system. It's also advisable to include links to log queries within your metrics dashboard. This can save precious time during an outage.
+This high-level view doesn't exclude the need for more detailed dashboards for each service. However, it provides an aggregated and simplified overview, which is essential for monitoring the system as a whole.
 
-You may want to inject system events and user events into your dashboards. These can assist in understanding the impact on various systems. Deployment events could be added to help identify if newly introduced code is affecting the overall system.
+
+## Adding Depth to Dashboards <a name="adding-depth-to-dashboards"></a>
+
+While high-level dashboards provide a broad overview of the system health, there are situations where more granular detail is required for each service. These details are presented in dedicated dashboards for each service.
+
+For instance, let's continue with our e-commerce application example. Here's what a more detailed dashboard for each service might look like:
+
+- **User Management Service Dashboard:** Total users, new users per day, active users per day, failed login attempts, account creation errors, etc.
+
+- **Inventory Management Service Dashboard:** Inventory levels per product, average inventory level, product out-of-stock events, inventory update errors, etc.
+
+- **Order Management Service Dashboard:** Total orders, new orders per day, orders in progress, cancelled orders, order completion time, order processing errors, etc.
+
+- **Payment Gateway Service Dashboard:** Successful transactions, failed transactions, transaction volume, average transaction time, transaction errors, etc.
+
+- **Shipping Service Dashboard:** Total shipments, new shipments per day, shipments in transit, delayed shipments, shipment delivery errors, etc.
+
+This increased level of detail can help identify issues within specific services and facilitate faster troubleshooting. Furthermore, you could inject system events and user events into these dashboards. These can help identify the impact on various systems. Additionally, deployment events could help identify if newly introduced code is affecting the overall system.
+
+Embedding links to related log queries directly into these detailed dashboards can provide easy access to additional information if needed, especially during a system outage.
+
+The structure of the detailed dashboards, in relation to each microservice and how they communicate with one another, can be visualized using the following Mermaid diagram:
 
 ```mermaid
 graph LR
-  DetailedDashboard[Detailed Dashboard]
-  LogQueries[Log Queries]
-  SystemEvents[System Events]
-  UserEvents[User Events]
-  DeploymentEvents[Deployment Events]
+  subgraph Dashboard Features
+    LogQueries[Log Queries]
+    SystemEvents[System Events]
+    UserEvents[User Events]
+  end
 
-  DetailedDashboard -->|Links| LogQueries
-  DetailedDashboard -->|Inject| SystemEvents
-  DetailedDashboard -->|Inject| UserEvents
-  DetailedDashboard -->|Inject| DeploymentEvents
+  UserManagementDashboard[User Management Dashboard]
+  InventoryManagementDashboard[Inventory Management Dashboard]
+  OrderManagementDashboard[Order Management Dashboard]
+  PaymentGatewayDashboard[Payment Gateway Dashboard]
+  ShippingServiceDashboard[Shipping Service Dashboard]
+
+  DashboardFeatures --> UserManagementDashboard
+  DashboardFeatures --> InventoryManagementDashboard
+  DashboardFeatures --> OrderManagementDashboard
+  DashboardFeatures --> PaymentGatewayDashboard
+  DashboardFeatures --> ShippingServiceDashboard
 ```
+
+This expanded view enables you to drill down into a specific service to gain a more in-depth understanding, thereby facilitating more accurate troubleshooting.
 
 ## Effective Use of Alarms <a name="effective-use-of-alarms"></a>
 Alarms are important for immediate issue detection. Whenever possible, traces on your graphs at alarm points can be beneficial. A visual representation of the reason for an alarm can expedite the mean time to resolution. Each alarm should have a defined cause.
